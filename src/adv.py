@@ -1,5 +1,6 @@
 from room import Room
-
+from player import Player
+from item import Item
 # Declare all the rooms
 
 room = {
@@ -39,13 +40,56 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 
+player = Player(room['outside'])
+print(player)
+
+
+def try_direction(direction, current_room):
+    attribute = direction + "_to"
+
+    if hasattr(current_room, attribute):
+        return getattr(current_room, attribute)
+
+
 # Write a loop that:
 #
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
+while True:
+    # * Prints the current room name
+    print(player.current_room.name)
+    # * Prints the current description (the textwrap module might be useful here).
+    print(player.current_room.description)
+    # * Waits for user input and decides what to do.
+    # s = input("\n>").lower()[0]
+    s = input("\n>").lower().split(' ')
+    print("First s =", len(s))
+    if len(s) == 1:
+        # grab the first character of the first word
+        s = s[0][0]
+        print("Second s =", s)
+        if s == "q":
+            print("See you next time!")
+            break
+
+        player.current_room = try_direction(s, player.current_room)
+
+    elif len(s) == 2:
+        first_word = s[0]
+        print("First word=", first_word)
+        second_word = s[1]
+        if (first_word == "get" or first_word == "take"):
+            print("Yeahhh", first_word)
+        else:
+            print("You must get or take!")
+        continue
+        # if first_word in ['get', 'drop']:
+
+    else:
+        print("I don't understand that.")
+        continue
+
+        #
+        # If the user enters a cardinal direction, attempt to move to the room there.
+        # Print an error message if the movement isn't allowed.
+
+        #
+        # If the user enters "q", quit the game.
