@@ -5,23 +5,27 @@ from item import Item
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+                     "North of you, the cave mount beckons", ['coffee']),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east."""),
+passages run north and east.""", []),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm."""),
+the distance, but there is no way across the chasm.""", []),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
-to north. The smell of gold permeates the air."""),
+to north. The smell of gold permeates the air.""", ['bottle']),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+earlier adventurers. The only exit is to the south.""", []),
 }
 
+item = {
+    'bottle': Item("bottle", "the bottle is old"),
+    'coffee': Item('coffee', 'from Brazil')
+}
 
 # Link rooms together
 
@@ -40,8 +44,18 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 
+
 player = Player(room['outside'])
 print(player)
+
+
+def grab_item(item):
+    try:
+        player.inventory.index(item)
+        player.inventory.remove(item)
+        player.inventory.append(item)
+    except:
+        print(item, "is not here!")
 
 
 def try_direction(direction, current_room):
@@ -58,6 +72,8 @@ while True:
     print(player.current_room.name)
     # * Prints the current description (the textwrap module might be useful here).
     print(player.current_room.description)
+    # Prints items
+    print(player.current_room.inventory)
     # * Waits for user input and decides what to do.
     # s = input("\n>").lower()[0]
     s = input("\n>").lower().split(' ')
@@ -78,6 +94,12 @@ while True:
         second_word = s[1]
         if (first_word == "get" or first_word == "take"):
             print("Yeahhh", first_word)
+            print("Second word =>", second_word)
+            print("Inventory", player.current_room.inventory)
+            if (second_word in player.current_room.inventory):
+                print("It's in there!!")
+            else:
+                print("Nope, not here!")
         else:
             print("You must get or take!")
         continue
