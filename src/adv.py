@@ -1,8 +1,8 @@
 from room import Room
 from player import Player
 from item import Item
-# Declare all the rooms
 
+# Declare all the rooms
 room = {
     'outside':  Room("Outside Cave Entrance",
                      "North of you, the cave mount beckons", ['coffee']),
@@ -28,7 +28,6 @@ item = {
 }
 
 # Link rooms together
-
 room['outside'].n_to = room['foyer']
 room['foyer'].s_to = room['outside']
 room['foyer'].n_to = room['overlook']
@@ -42,6 +41,9 @@ room['treasure'].s_to = room['narrow']
 # Main
 #
 
+# room names
+names = ['outside', 'foyer', 'overlook', 'narrow', 'treasure']
+
 # intro message
 print("\nWelcome. May the odds forever be in your favour. \n")
 
@@ -49,11 +51,23 @@ player_name = input("\n> What is your name?\n\n")
 
 # make a new player object that is currently in the 'outside' room.
 player = Player(room['outside'], [], player_name)
-print(player)
+print("\n", player)
+
+
+# get the inventory from a room
+def get_room_inventory(current_room):
+    try:
+        location = current_room.split(' ')[0].lower()
+        if location in names:
+            return room[location].inventory
+        elif current_room.split(' ')[1].lower() in names:
+            location = current_room.split(' ')[1].lower()
+            return room[location].inventory
+    except:
+        print(current_room, "does not exist!")
+
 
 # take the item from the room and add it to player inventory
-
-
 def take_from_room(item, current_room):
     try:
         location = current_room.split(' ')[0].lower()
@@ -77,7 +91,6 @@ def drop_item(item, current_room):
 # move the player into a different room
 def try_direction(direction, current_room):
     attribute = direction + "_to"
-
     if hasattr(current_room, attribute):
         return getattr(current_room, attribute)
 
@@ -85,19 +98,11 @@ def try_direction(direction, current_room):
 # Write a loop that:
 #
 while True:
-    # * Prints the current room name
-    # print(player.current_room.name)
-    # * Prints the current description (the textwrap module might be useful here).
-    # print(player.current_room.description)
-    # Prints items
-    # print(player.current_room.inventory)
-    # * Waits for user input and decides what to do.
-    s = input("\n>").lower().split(' ')
-    print("First s =", len(s))
+    s = input(
+        "\n>Make your move. Choose North, South, East or West or get / drop items.\n\n").lower().split(' ')
     if len(s) == 1:
         # grab the first character of the first word
         s = s[0][0]
-        print("Second s =", s)
         if s == "q":
             print("See you next time!")
             break
@@ -107,17 +112,19 @@ while True:
 
         else:
             player.current_room = try_direction(s, player.current_room)
+            if player.current_room != None:
+                print(player.current_room)
+                room_inventory = get_room_inventory(player.current_room.name)
+                print("Inventory in the room:", room_inventory)
+            else:
+                print("\n\n--------Muerto--------\n\n")
+                break
 
     elif len(s) == 2:
         first_word = s[0]
-        print("First word=", first_word)
         second_word = s[1]
         if (first_word == "get" or first_word == "take"):
-            print("Yeahhh", first_word)
-            print("Second word =>", second_word)
-            print("Inventory", player.current_room.inventory)
             if (second_word in player.current_room.inventory):
-                print("It's in there!!")
                 take_from_room(second_word, player.current_room.name)
                 Item.on_take(second_word)
             else:
