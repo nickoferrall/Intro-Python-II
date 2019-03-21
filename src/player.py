@@ -3,9 +3,9 @@
 
 
 class Player:
-    def __init__(self, current_room):
+    def __init__(self, current_room, inventory):
         self.current_room = current_room
-        # self.inventory = inventory
+        self.inventory = inventory
         # self.location = location
 
     def __repr__(self):

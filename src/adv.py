@@ -45,7 +45,7 @@ room['treasure'].s_to = room['narrow']
 # Make a new player object that is currently in the 'outside' room.
 
 
-player = Player(room['outside'])
+player = Player(room['outside'], [])
 print(player)
 
 
@@ -60,15 +60,11 @@ def grab_item(item):
 
 def take_from_room(item, current_room):
     try:
-        # room.inventory.remove(item)
-        # print("From take_from_room:", room.inventory)
-        print("Current room ==>", current_room.split(' ')[0])
         location = current_room.split(' ')[0].lower()
-        print("Item --", item)
-        # print("Answer..", room.current_room.split(' ')[0])
-        print("Answer..", room[location].inventory)
-        print("Answer..", room[location].inventory.remove(item))
-        print("Answer..", room[location].inventory)
+        room[location].inventory.remove(item)
+        player.inventory.append(item)
+        print("Player inventory:", player.inventory)
+        print("Room inventory:", room[location].inventory)
 
     except:
         print(item, "is not here!")
@@ -116,11 +112,10 @@ while True:
                 print("It's in there!!")
                 take_from_room(second_word, player.current_room.name)
             else:
-                print("Nope, not here!")
+                print(second_word, "is not here!")
         else:
             print("You must get or take!")
         continue
-        # if first_word in ['get', 'drop']:
 
     else:
         print("I don't understand that.")
