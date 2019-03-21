@@ -58,6 +58,22 @@ def grab_item(item):
         print(item, "is not here!")
 
 
+def take_from_room(item, current_room):
+    try:
+        # room.inventory.remove(item)
+        # print("From take_from_room:", room.inventory)
+        print("Current room ==>", current_room.split(' ')[0])
+        location = current_room.split(' ')[0].lower()
+        print("Item --", item)
+        # print("Answer..", room.current_room.split(' ')[0])
+        print("Answer..", room[location].inventory)
+        print("Answer..", room[location].inventory.remove(item))
+        print("Answer..", room[location].inventory)
+
+    except:
+        print(item, "is not here!")
+
+
 def try_direction(direction, current_room):
     attribute = direction + "_to"
 
@@ -98,6 +114,7 @@ while True:
             print("Inventory", player.current_room.inventory)
             if (second_word in player.current_room.inventory):
                 print("It's in there!!")
+                take_from_room(second_word, player.current_room.name)
             else:
                 print("Nope, not here!")
         else:
