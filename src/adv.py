@@ -42,20 +42,16 @@ room['treasure'].s_to = room['narrow']
 # Main
 #
 
-# Make a new player object that is currently in the 'outside' room.
+# intro message
+print("\nWelcome. May the odds forever be in your favour. \n")
 
+player_name = input("\n> What is your name?\n\n")
 
-player = Player(room['outside'], [])
+# make a new player object that is currently in the 'outside' room.
+player = Player(room['outside'], [], player_name)
 print(player)
 
-
-# def grab_item(item):
-#     try:
-#         player.inventory.index(item)
-#         player.inventory.remove(item)
-#         player.inventory.append(item)
-#     except:
-#         print(item, "is not here!")
+# take the item from the room and add it to player inventory
 
 
 def take_from_room(item, current_room):
@@ -63,27 +59,22 @@ def take_from_room(item, current_room):
         location = current_room.split(' ')[0].lower()
         room[location].inventory.remove(item)
         player.inventory.append(item)
-        print("Player inventory:", player.inventory)
-        print("Room inventory:", room[location].inventory)
 
     except:
         print(item, "is not here!")
 
 
+# drop the item from player inventory into the room
 def drop_item(item, current_room):
     try:
         location = current_room.split(' ')[0].lower()
-        print("Pre drop Player inventory:", player.inventory)
-        print("Pre drop Room inventory:", room[location].inventory)
         player.inventory.remove(item)
         room[location].inventory.append(item)
-        print("Player inventory:", player.inventory)
-        print("Room inventory:", room[location].inventory)
-
     except:
         print(item, "is not here - nothing to drop!")
 
 
+# move the player into a different room
 def try_direction(direction, current_room):
     attribute = direction + "_to"
 
@@ -95,13 +86,12 @@ def try_direction(direction, current_room):
 #
 while True:
     # * Prints the current room name
-    print(player.current_room.name)
+    # print(player.current_room.name)
     # * Prints the current description (the textwrap module might be useful here).
-    print(player.current_room.description)
+    # print(player.current_room.description)
     # Prints items
-    print(player.current_room.inventory)
+    # print(player.current_room.inventory)
     # * Waits for user input and decides what to do.
-    # s = input("\n>").lower()[0]
     s = input("\n>").lower().split(' ')
     print("First s =", len(s))
     if len(s) == 1:
@@ -114,7 +104,6 @@ while True:
 
         elif s == "i":
             print("Player inventory:", player.inventory)
-            # continue
 
         else:
             player.current_room = try_direction(s, player.current_room)
@@ -135,17 +124,11 @@ while True:
                 print(second_word, "is not here!")
         elif (first_word == 'drop'):
             drop_item(second_word, player.current_room.name)
+            Item.on_drop(second_word)
         else:
-            print("You must get, take  or drop!")
+            print("You must get, take or drop!")
         continue
 
     else:
         print("I don't understand that.")
         continue
-
-        #
-        # If the user enters a cardinal direction, attempt to move to the room there.
-        # Print an error message if the movement isn't allowed.
-
-        #
-        # If the user enters "q", quit the game.

@@ -10,7 +10,7 @@ class Item:
         self.description = description
 
     def on_take(self):
-        print("That's right!! I've taken it!")
+        print("That's right!! I've taken", self)
 
     def on_drop(self):
-        print("Yup! I've dropped it!")
+        print("Yup! I've dropped", self)
