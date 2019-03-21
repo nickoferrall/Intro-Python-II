@@ -112,7 +112,7 @@ while True:
 
         else:
             player.current_room = try_direction(s, player.current_room)
-            if player.current_room != None:
+            if player.current_room is not None:
                 print(player.current_room)
                 room_inventory = get_room_inventory(player.current_room.name)
                 print("Inventory in the room:", room_inventory)
