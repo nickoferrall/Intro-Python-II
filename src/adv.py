@@ -112,7 +112,12 @@ while True:
             print("See you next time!")
             break
 
-        player.current_room = try_direction(s, player.current_room)
+        elif s == "i":
+            print("Player inventory:", player.inventory)
+            # continue
+
+        else:
+            player.current_room = try_direction(s, player.current_room)
 
     elif len(s) == 2:
         first_word = s[0]
