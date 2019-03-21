@@ -49,13 +49,13 @@ player = Player(room['outside'], [])
 print(player)
 
 
-def grab_item(item):
-    try:
-        player.inventory.index(item)
-        player.inventory.remove(item)
-        player.inventory.append(item)
-    except:
-        print(item, "is not here!")
+# def grab_item(item):
+#     try:
+#         player.inventory.index(item)
+#         player.inventory.remove(item)
+#         player.inventory.append(item)
+#     except:
+#         print(item, "is not here!")
 
 
 def take_from_room(item, current_room):
@@ -68,6 +68,20 @@ def take_from_room(item, current_room):
 
     except:
         print(item, "is not here!")
+
+
+def drop_item(item, current_room):
+    try:
+        location = current_room.split(' ')[0].lower()
+        print("Pre drop Player inventory:", player.inventory)
+        print("Pre drop Room inventory:", room[location].inventory)
+        player.inventory.remove(item)
+        room[location].inventory.append(item)
+        print("Player inventory:", player.inventory)
+        print("Room inventory:", room[location].inventory)
+
+    except:
+        print(item, "is not here - nothing to drop!")
 
 
 def try_direction(direction, current_room):
@@ -111,10 +125,13 @@ while True:
             if (second_word in player.current_room.inventory):
                 print("It's in there!!")
                 take_from_room(second_word, player.current_room.name)
+                Item.on_take(second_word)
             else:
                 print(second_word, "is not here!")
+        elif (first_word == 'drop'):
+            drop_item(second_word, player.current_room.name)
         else:
-            print("You must get or take!")
+            print("You must get, take  or drop!")
         continue
 
     else:

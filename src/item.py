@@ -8,3 +8,9 @@ class Item:
     def __init__(self, name, description):
         self.name = name
         self.description = description
+
+    def on_take(self):
+        print("That's right!! I've taken it!")
+
+    def on_drop(self):
+        print("Yup! I've dropped it!")
